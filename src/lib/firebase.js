@@ -19,6 +19,6 @@ const { FieldValue } = Firebase.firestore;
 
 // call seed
 // seedDatabase(firebase);
-console.log('firebase init successfully', firebase);
+// console.log('firebase init successfully', firebase);
 
 export { firebase, FieldValue };
