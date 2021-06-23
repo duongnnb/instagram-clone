@@ -17,6 +17,9 @@
   },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
+    "react/prop-types": "warn",
+    "no-unreachable": "warn",
+    "react/self-closing-comp": "warn",
     "no-debugger": 0,
     "no-alert": 0,
     "no-unused-vars": 1,
