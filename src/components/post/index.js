@@ -8,7 +8,6 @@ import Comments from './comment';
 
 export default function Post({ content }) {
   const commentInput = useRef(null);
-
   const handleFocus = () => commentInput.current.focus();
 
   return (
@@ -18,7 +17,7 @@ export default function Post({ content }) {
       <Actions
         docId={content.docId}
         totalLikes={content.likes.length}
-        likedPhoto={content.userLikedPhoto}
+        likedPhoto={content.userLikePhoto}
         handleFocus={handleFocus}
       />
       <Footer caption={content.caption} username={content.username} />
@@ -37,7 +36,7 @@ Post.propTypes = {
     imageSrc: PropTypes.string.isRequired,
     caption: PropTypes.string.isRequired,
     docId: PropTypes.string.isRequired,
-    userLikedPhoto: PropTypes.bool.isRequired,
+    userLikePhoto: PropTypes.bool.isRequired,
     likes: PropTypes.array.isRequired,
     comments: PropTypes.array.isRequired,
     dateCreated: PropTypes.number.isRequired,
