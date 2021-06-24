@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import useUser from '../../hooks/use-user';
-import { isUserFollowingProfile } from '../../services/firebase';
+import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
 
 export default function Header({
   photosCount,
@@ -12,21 +12,27 @@ export default function Header({
     docId: profileDocId,
     userId: profileUserId,
     fullName,
-    followers = [],
-    following = [],
+    followers,
+    following,
     username: profileUsername,
   },
 }) {
   const { user } = useUser();
-  const [isFollowingProfile, setIsFollowingProfile] = useState(false);
+  const [isFollowingProfile, setIsFollowingProfile] = useState(null);
   const activeBtnFollow = user.username && user.username !== profileUsername;
 
-  const handleToggleFollow = () => {
+  const handleToggleFollow = async () => {
     setIsFollowingProfile((isFollowingProfile) => !isFollowingProfile);
     setFollowerCount({
-      followerCount: isFollowingProfile ? followers.length + 1 : followers.length - 1,
+      followerCount: isFollowingProfile ? followerCount - 1 : followerCount + 1,
     });
+
+    await toggleFollow(isFollowingProfile, user.docId, profileDocId, profileUserId, user.userId);
   };
+
+  useEffect(() => {
+    console.log('followerCount', followerCount);
+  }, [followerCount]);
 
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
@@ -77,7 +83,7 @@ export default function Header({
                 <span className="font-bold">{photosCount}</span> photos
               </p>
               <p className="mr-10">
-                <span className="font-bold">{followers.length}</span>{' '}
+                <span className="font-bold">{followerCount}</span>{' '}
                 {followers.length === 1 ? 'follower' : 'followers'}
               </p>
               <p className="mr-10">
@@ -98,7 +104,6 @@ Header.propTypes = {
   photosCount: PropTypes.number.isRequired,
   followerCount: PropTypes.number.isRequired,
   setFollowerCount: PropTypes.func.isRequired,
-
   profile: PropTypes.shape({
     docId: PropTypes.string,
     userId: PropTypes.string,

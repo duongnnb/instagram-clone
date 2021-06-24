@@ -132,3 +132,21 @@ export async function isUserFollowingProfile(loggedInUserUsername, profileUserId
   }));
   return response.userId;
 }
+
+export async function toggleFollow(
+  isFollowingProfile,
+  activeUserDocId,
+  profileDocId,
+  profileUserId,
+  followingUserId
+) {
+  // console.log('isFollowingProfile', isFollowingProfile);
+  // console.log('activeUserDocId', activeUserDocId);
+  // console.log('profileDocId', profileDocId);
+  // console.log('profileUserId', profileUserId);
+  // console.log('followingUserId', followingUserId);
+
+  // return;
+  await updateLoggedInUserFollowing(activeUserDocId, profileUserId, isFollowingProfile);
+  await updateFollowedUserFollowers(profileDocId, followingUserId, isFollowingProfile);
+}

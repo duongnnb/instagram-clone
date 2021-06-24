@@ -24,10 +24,11 @@ export default function Profile({ user }) {
     if (user) {
       getProfileInfoAndPhotos();
     }
-  }, [user]);
+  }, [user.username]);
 
   return (
     <>
+      <p>profile</p>
       <Header
         photosCount={photosCollection ? photosCollection.length : 0}
         profile={profile}
