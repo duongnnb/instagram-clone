@@ -28,7 +28,6 @@ export default function Profile({ user }) {
 
   return (
     <>
-      <p>profile</p>
       <Header
         photosCount={photosCollection ? photosCollection.length : 0}
         profile={profile}
