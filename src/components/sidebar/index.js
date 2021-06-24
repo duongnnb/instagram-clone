@@ -1,10 +1,11 @@
-import { memo } from 'react';
-import useUser from '../../hooks/use-user';
+import { useContext } from 'react';
+import LoggedInUserContext from '../../context/logged-in-user';
 import Suggestion from './suggestion';
 import User from './user';
 
 const Sidebar = () => {
-  const { user: { docId, fullName, username, userId, following } = {} } = useUser();
+  const { user: { docId = '', fullName, username, userId, following } = {} } =
+    useContext(LoggedInUserContext);
 
   return (
     <div className="p-4">
@@ -14,6 +15,6 @@ const Sidebar = () => {
   );
 };
 
-export default memo(Sidebar);
+export default Sidebar;
 
-Sidebar.whyDidYouRender = true;
+// Sidebar.whyDidYouRender = true;

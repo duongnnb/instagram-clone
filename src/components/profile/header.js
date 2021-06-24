@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import UserContext from '../../context/user';
 import useUser from '../../hooks/use-user';
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
 
@@ -17,7 +18,8 @@ export default function Header({
     username: profileUsername,
   },
 }) {
-  const { user } = useUser();
+  const { user: loggedInUser } = useContext(UserContext);
+  const { user } = useUser(loggedInUser?.uid);
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
   const activeBtnFollow = user.username && user.username !== profileUsername;
 
@@ -31,22 +33,18 @@ export default function Header({
   };
 
   useEffect(() => {
-    console.log('followerCount', followerCount);
-  }, [followerCount]);
-
-  useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
       const isFollowing = await isUserFollowingProfile(user.username, profileUserId);
       setIsFollowingProfile(!!isFollowing);
     };
-    if (user.username && profileUserId) {
+    if (user?.username && profileUserId) {
       isLoggedInUserFollowingProfile();
     }
-  }, [user.username, profileUserId]);
+  }, [user?.username, profileUserId]);
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center">
+      <div className="container flex justify-center items-center">
         <img
           className="rounded-full h-40 w-40 flex"
           alt={`${user.username} profile`}
@@ -72,13 +70,10 @@ export default function Header({
           )}
         </div>
         <div className="container flex mt-4">
-          {followers === undefined || following === undefined ? (
+          {!followers || !following ? (
             <Skeleton count={1} width={677} height={24} />
           ) : (
             <>
-              {/* <p className="mr-10">
-                <span className="font-bold">{photosCount}</span>
-              </p> */}
               <p className="mr-10">
                 <span className="font-bold">{photosCount}</span> photos
               </p>
@@ -93,7 +88,7 @@ export default function Header({
           )}
         </div>
         <div className="container mt-4">
-          <p className="font-medium">Something about me</p>
+          <p className="font-medium">{!fullName ? <Skeleton count={1} height={24} /> : fullName}</p>
         </div>
       </div>
     </div>

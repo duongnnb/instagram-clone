@@ -20,7 +20,6 @@ export default function Login() {
     event.preventDefault();
 
     const usernameExists = await doesUsernameExist(username);
-    console.log('usernameExists', usernameExists);
 
     if (!usernameExists.length) {
       try {

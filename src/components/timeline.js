@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import usePhotos from '../hooks/use-photos';
 import Post from './post';
+import LoggedInUserContext from '../context/logged-in-user';
 
 export default function Timeline() {
-  const { photos } = usePhotos();
+  const { user } = useContext(LoggedInUserContext);
+  const { photos } = usePhotos(user);
 
   return (
     <div className="container col-span-2">
@@ -11,9 +14,9 @@ export default function Timeline() {
         <>
           <Skeleton count={2} width={640} height={600} />
         </>
-      ) : photos?.length > 0 ? (
+      ) : (
         photos.map((content) => <Post key={content.docId} content={content} />)
-      ) : null}
+      )}
     </div>
   );
 }

@@ -36,8 +36,6 @@ export async function getUserByUserId(userId) {
 export async function getSuggestedProfiles(userId, following) {
   const result = await firebase.firestore().collection('users').limit(10).get();
 
-  console.log(userId, following);
-  console.log('result', result);
   return result.docs
     .map((user) => ({ ...user.data(), docId: user.id }))
     .filter((profile) => profile.userId !== userId && !following.includes(profile.userId));
@@ -87,8 +85,6 @@ export async function getPhotos(userId, following) {
     docId: photo.id,
   }));
 
-  console.log('userFollowedPhotos', userFollowedPhotos);
-
   const photosWithUserDetails = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
       let userLikePhoto = false;
@@ -100,7 +96,6 @@ export async function getPhotos(userId, following) {
       return { username, ...photo, userLikePhoto };
     })
   );
-  console.log('photosWithUserDetails', photosWithUserDetails);
 
   return photosWithUserDetails;
 }
@@ -140,12 +135,6 @@ export async function toggleFollow(
   profileUserId,
   followingUserId
 ) {
-  // console.log('isFollowingProfile', isFollowingProfile);
-  // console.log('activeUserDocId', activeUserDocId);
-  // console.log('profileDocId', profileDocId);
-  // console.log('profileUserId', profileUserId);
-  // console.log('followingUserId', followingUserId);
-
   // return;
   await updateLoggedInUserFollowing(activeUserDocId, profileUserId, isFollowingProfile);
   await updateFollowedUserFollowers(profileDocId, followingUserId, isFollowingProfile);
